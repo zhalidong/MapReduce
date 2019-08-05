@@ -1,12 +1,17 @@
 package hdfs24;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Arrays;
 
 import javax.naming.InitialContext;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
@@ -112,8 +117,76 @@ public class HdfsClientDemo{
 		fs.close();
 	}
 	
+	/*
+	 * 读取hdfs中的文件的内容
+	 * 
+	 */
+	@Test
+	public void TestReadData() throws IllegalArgumentException, IOException{
+		
+		FSDataInputStream in = fs.open(new Path("/test.txt"));
+		
+		
+		
+		//字符流
+		BufferedReader br = new BufferedReader(new InputStreamReader(in,"utf-8"));
+		String line = "";
+		while((line=br.readLine())!=null){
+			System.out.println(line);
+		}
+		
+		
+		br.close();
+		in.close();
+		fs.close();
+		
+	}
+	
+	/*
+	 * 读取hdfs中的文件指定偏移量的内容
+	 * 作业题：用本例中的知识 实现读取一个文本文件中的指定BLOCK块中的所有数据
+	 * 
+	 */
+	@Test
+	public void TestRandomReadData() throws IllegalArgumentException, IOException{
+		
+		FSDataInputStream in = fs.open(new Path("/xx.dat"));
+		
+		//将读取的起始位置进行指定
+		in.seek(12);
+		//读16个字节
+		byte[] b = new byte[16];
+		in.read(b);
+		
+		System.out.println(new String(b));
+		in.close();
+		fs.close();
+	}
 	
 	
 	
+	
+	/*
+	 * 往hdfs中的文件写内容
+	 * 
+	 */
+	@Test
+	public void testWriteData() throws IllegalArgumentException, IOException{
+		FSDataOutputStream out = fs.create(new Path("/zz.jpg"),false);
+		
+		//D:\0db10c6a58935b5c365b0000792d75c3_t.jpg
+		FileInputStream in = new FileInputStream("D:\0db10c6a58935b5c365b0000792d75c3_t.jpg");
+		
+		
+		
+		byte[] b = new byte[1024];
+		int read=0;
+		while((read=in.read(b))!=-1){
+			out.write(b,0,read);
+		}
+		in.close();
+		out.close();
+		fs.close();
+	}
 	
 }
