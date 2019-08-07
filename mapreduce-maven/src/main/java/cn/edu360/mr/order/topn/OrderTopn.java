@@ -81,6 +81,9 @@ public class OrderTopn {
 Configuration conf = new Configuration();
 		conf.setInt("order.top.n", 2);
 		Job job = Job.getInstance(conf);
+		
+//		job.setGroupingComparatorClass(cls);
+		
 		job.setJarByClass(OrderTopn.class);
 		job.setMapperClass(OrderTopnMapper.class);
 		job.setReducerClass(OrderTopnReducer.class);
