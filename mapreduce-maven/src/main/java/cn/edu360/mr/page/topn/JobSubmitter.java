@@ -14,7 +14,15 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import cn.edu360.mr.flow.FlowBean;
 import cn.edu360.mr.flow.FlowCountMapper;
 import cn.edu360.mr.flow.FlowCountReducer;
-
+/*
+ * 求出每个网站被访问次数最多的top3个url
+ * 思路： 
+		map阶段——切字段，抽取域名作为key，url作为value，返回即可
+		reduce阶段——用迭代器，将一个域名的一组url迭代出来，挨个放入一个hashmap中进行计数，
+			最后从这个hashmap中挑出次数最多的3个url作为结果返回
+ * 
+ * 
+ */
 public class JobSubmitter {
 	public static void main(String[] args) throws Exception {
 		
