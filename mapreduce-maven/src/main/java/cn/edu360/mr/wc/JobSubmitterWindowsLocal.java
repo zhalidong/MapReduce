@@ -25,6 +25,10 @@ public class JobSubmitterWindowsLocal {
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(IntWritable.class);
 		
+		//设置map task 端的局部聚合逻辑类
+		job.setCombinerClass(WordCountCombiner.class);
+		
+		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		
